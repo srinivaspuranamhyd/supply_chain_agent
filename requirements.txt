@@ -1,0 +1,10 @@
+streamlit
+langchain
+llama-index
+chromadb
+pandas
+langchain-community 
+langchain-ollama
+langchain-chroma
+sentence-transformers
+langchain-huggingface
