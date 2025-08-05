@@ -1,11 +1,23 @@
 import os
 import pandas as pd
-from langchain_core.documents import Document
+from langchain.schema import Document
 from langchain_ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
 from config import CSV_PATH, CHROMA_PATH, EMBEDDING_MODEL
 
 def load_and_embed_csv(csv_path, chroma_path, embedding_model):
+    import requests
+    # Check Ollama server availability before embedding
+    ollama_url = "https://ollama-llama3-2-71690586093.asia-southeast1.run.app/api/tags"
+    try:
+        response = requests.get(ollama_url, timeout=5)
+        if response.status_code != 200:
+            raise RuntimeError(f"Ollama server is not responding at {ollama_url}")
+    except Exception as e:
+        import streamlit as st
+        st.error(f"Ollama server is not running or unreachable at {ollama_url}. Please start Ollama and ensure the model '{embedding_model}' is available. Error: {e}")
+        raise
+
     df = pd.read_csv(csv_path)
     docs = [
         Document(
@@ -22,10 +34,13 @@ def load_and_embed_csv(csv_path, chroma_path, embedding_model):
         persist_directory=chroma_path
     )
     print(f"Embedding {len(docs)} documents... This may take a while.")
-    
-    # Add documents to the vector database
-    vectordb.add_documents(documents=docs, ids=ids, verbose=True)
-    
+    try:
+        # Add documents to the vector database
+        vectordb.add_documents(documents=docs, ids=ids, verbose=True)
+    except Exception as e:
+        import streamlit as st
+        st.error(f"Failed to embed documents. Please ensure Ollama is running and the model '{embedding_model}' is loaded. Error: {e}")
+        raise
     print(f"Loaded {len(docs)} documents into the vector database.")
 
     return vectordb
