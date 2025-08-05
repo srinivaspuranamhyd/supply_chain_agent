@@ -1,13 +1,13 @@
 from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
-from config import OLLAMA_MODEL
+from config import OLLAMA_MODEL, OLLAMA_BASE_URL  # Import base_url
 from database import optimized_retriever
 import streamlit as st
 
 def get_ollama_llm():
     return OllamaLLM(
         model=OLLAMA_MODEL,
-        base_url="https://ollama-llama3-2-71690586093.asia-southeast1.run.app",
+        base_url=OLLAMA_BASE_URL,  # Use base_url from config
         temperature=1,
         streaming=True
     )
