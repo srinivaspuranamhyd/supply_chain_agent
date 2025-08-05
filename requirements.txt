@@ -8,4 +8,4 @@ langchain-ollama
 langchain-chroma
 sentence-transformers
 langchain-huggingface
-pysqlite3-binary
+# pysqlite3-binary
