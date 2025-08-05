@@ -7,10 +7,10 @@ from config import CSV_PATH, CHROMA_PATH, EMBEDDING_MODEL
 
 def load_and_embed_csv(csv_path, chroma_path, embedding_model):
     import requests
+    ollama_url = "https://ollama-llama3-2-71690586093.asia-southeast1.run.app"
     # Check Ollama server availability before embedding
-    ollama_url = "https://ollama-llama3-2-71690586093.asia-southeast1.run.app/api/tags"
     try:
-        response = requests.get(ollama_url, timeout=5)
+        response = requests.get(ollama_url + "/api/tags", timeout=5)
         if response.status_code != 200:
             raise RuntimeError(f"Ollama server is not responding at {ollama_url}")
     except Exception as e:
@@ -27,7 +27,7 @@ def load_and_embed_csv(csv_path, chroma_path, embedding_model):
         for _, row in df.iterrows()
     ]
     ids = [str(i) for i in range(len(docs))]
-    embeddings = OllamaEmbeddings(model=embedding_model)
+    embeddings = OllamaEmbeddings(model=embedding_model, base_url=ollama_url)
     vectordb = Chroma(
         collection_name='supply_chain',
         embedding_function=embeddings,
@@ -46,10 +46,11 @@ def load_and_embed_csv(csv_path, chroma_path, embedding_model):
     return vectordb
 
 def initialize_vectordb():
+    ollama_url = "https://ollama-llama3-2-71690586093.asia-southeast1.run.app"
     if not os.path.exists(CHROMA_PATH):
         return load_and_embed_csv(CSV_PATH, CHROMA_PATH, EMBEDDING_MODEL)
     else:
-        embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
+        embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL, base_url=ollama_url)
         return Chroma(
             collection_name='supply_chain',
             embedding_function=embeddings,
