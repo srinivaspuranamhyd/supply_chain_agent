@@ -7,7 +7,7 @@ import streamlit as st
 def get_ollama_llm():
     return OllamaLLM(
         model=OLLAMA_MODEL,
-        base_url="http://localhost:11434",
+        base_url="https://ollama-llama3-2-71690586093.asia-southeast1.run.app",
         temperature=1,
         streaming=True
     )

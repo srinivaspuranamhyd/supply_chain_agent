@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+.env
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# Streamlit
+.streamlit/
+
+# Chroma DB
+chroma_db/
+chroma_db/*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
