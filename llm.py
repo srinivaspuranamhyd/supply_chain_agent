@@ -14,7 +14,7 @@ def get_ollama_llm():
 
 def process_user_input(vectordb, user_input, chat_history):
     # Use optimized_retriever for document retrieval
-    retrieved_docs = optimized_retriever(vectordb, query=user_input, k=10)
+    retrieved_docs = optimized_retriever(vectordb, query=user_input, k=30)
 
     print(f"Retrieved {len(retrieved_docs)} documents for query: {retrieved_docs}")
 
